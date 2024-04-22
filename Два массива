@@ -1,0 +1,12 @@
+from collections import defaultdict
+
+array1 = list(map(int, input().split()))
+array2 = list(map(int, input().split()))
+
+count_dict = defaultdict(int)
+for num in array2:
+    count_dict[num] += 1
+
+result = [count_dict[num] for num in array1]
+
+print(*result)
