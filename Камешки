@@ -1,0 +1,46 @@
+def merge_and_count_inversions(arr, left, mid, right):
+    left_arr = arr[left:mid+1]
+    right_arr = arr[mid+1:right+1]
+    i = j = inv_count = 0
+    k = left
+
+    while i < len(left_arr) and j < len(right_arr):
+        if left_arr[i] >= right_arr[j]:
+            arr[k] = left_arr[i]
+            i += 1
+            inv_count += len(right_arr) - j
+        else:
+            arr[k] = right_arr[j]
+            j += 1
+        k += 1
+
+    while i < len(left_arr):
+        arr[k] = left_arr[i]
+        i += 1
+        k += 1
+
+    while j < len(right_arr):
+        arr[k] = right_arr[j]
+        j += 1
+        k += 1
+
+    return inv_count
+
+def merge_sort_and_count_inversions(arr, left, right):
+    inv_count = 0
+    if left < right:
+        mid = (left + right) // 2
+        inv_count += merge_sort_and_count_inversions(arr, left, mid)
+        inv_count += merge_sort_and_count_inversions(arr, mid + 1, right)
+        inv_count += merge_and_count_inversions(arr, left, mid, right)
+    return inv_count
+
+# Считываем количество камешков
+N = int(input())
+
+# Считываем размеры камешков и сохраняем их в массив
+stones = []
+for _ in range(N):
+    stones.append(int(input()))
+
+print(merge_sort_and_count_inversions(stones, 0, N - 1))
