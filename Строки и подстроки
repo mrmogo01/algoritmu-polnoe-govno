@@ -1,0 +1,31 @@
+def find_repeated_substring(s):
+    n = len(s)
+    # Предварительный расчет хешей для всех префиксов строки и степеней
+    base = 31
+    mod = 10**9 + 7
+    powers = [1]
+    hashes = [0]
+    for i in range(1, n + 1):
+        powers.append((powers[-1] * base) % mod)
+        hashes.append((hashes[-1] * base + ord(s[i - 1])) % mod)
+    
+    # Функция для вычисления хеша подстроки
+    def hash_substring(start, end):
+        return (hashes[end] - hashes[start] * powers[end - start]) % mod
+    
+    # Поиск повторяющейся подстроки с использованием хеширования
+    for length in range(1, n):
+        if n % length == 0:
+            hash_ = hash_substring(0, length)
+            is_repeated = True
+            for i in range(length, n, length):
+                if hash_substring(i, i + length) != hash_:
+                    is_repeated = False
+                    break
+            if is_repeated:
+                return n // length, s[:length]
+    return 1, s
+
+s = input()
+k, t = find_repeated_substring(s)
+print(k, t)
