@@ -1,0 +1,46 @@
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class Stack:
+    def __init__(self):
+        self.head = None
+
+    def is_empty(self):
+        return self.head is None
+
+    def push(self, data):
+        new_node = Node(data)
+        new_node.next = self.head
+        self.head = new_node
+
+    def pop(self):
+        if self.is_empty():
+            raise IndexError("Pop from an empty stack")
+        data = self.head.data
+        self.head = self.head.next
+        return data
+
+def evaluate_rpn(expression):
+    stack = Stack()
+    operators = {'+': lambda x, y: x + y,
+                 '-': lambda x, y: x - y,
+                 '*': lambda x, y: x * y,
+                 '/': lambda x, y: x // y,
+                 '%': lambda x, y: x % y}
+
+    for token in expression.split():
+        if token.isdigit():
+            stack.push(int(token))
+        elif token in operators:
+            y = stack.pop()
+            x = stack.pop()
+            stack.push(operators[token](x, y))
+
+    return stack.pop()
+
+# Ввод выражения в обратной польской записи
+expression = input().strip()
+# Вычисление и вывод результата
+print(evaluate_rpn(expression))
