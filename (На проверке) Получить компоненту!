@@ -1,0 +1,24 @@
+def dfs(graph, visited, vertex, component):
+    visited[vertex] = True
+    component.append(vertex)
+    for neighbor in graph[vertex]:
+        if not visited[neighbor]:
+            dfs(graph, visited, neighbor, component)
+
+def find_connected_component(graph, start):
+    visited = {vertex: False for vertex in graph}
+    component = []
+    dfs(graph, visited, start, component)
+    return sorted(component)
+
+def main():
+    n, v = map(int, input().split())
+    graph = {}
+    for vertex in range(n):
+        neighbors = list(map(int, input().split()))
+        graph[vertex] = [neighbor for neighbor in neighbors if neighbor != -1]
+    connected_component = find_connected_component(graph, v)
+    print(' '.join(map(str, connected_component)))
+
+if __name__ == "__main__":
+    main()
