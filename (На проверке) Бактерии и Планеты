@@ -1,0 +1,27 @@
+def quicksort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+    return quicksort(left) + middle + quicksort(right)
+
+n = int(input())
+bacteria_ranges = []
+for _ in range(n):
+    min_temp, max_temp = map(int, input().split())
+    bacteria_ranges.append((min_temp, max_temp))
+
+bacteria_ranges = quicksort(bacteria_ranges)
+
+planet_temperatures = list(map(int, input().split()))
+
+for temp in planet_temperatures:
+    count = 0
+    for bacteria in bacteria_ranges:
+        if bacteria[0] <= temp <= bacteria[1]:
+            count += 1
+        elif temp < bacteria[0]:
+            break 
+    print(count)
