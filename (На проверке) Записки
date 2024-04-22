@@ -1,0 +1,53 @@
+import heapq
+from collections import Counter, defaultdict
+
+class Node:
+    def __init__(self, char=None, freq=None):
+        self.char = char
+        self.freq = freq
+        self.left = None
+        self.right = None
+    
+    def __lt__(self, other):
+        return self.freq < other.freq
+
+def build_huffman_tree(text):
+    char_freq = Counter(text)
+    heap = [Node(char, freq) for char, freq in char_freq.items()]
+    heapq.heapify(heap)
+    
+    while len(heap) > 1:
+        left = heapq.heappop(heap)
+        right = heapq.heappop(heap)
+        merged = Node(freq=left.freq + right.freq)
+        merged.left = left
+        merged.right = right
+        heapq.heappush(heap, merged)
+    
+    return heap[0]
+
+def generate_codes(root, code='', codes=None):
+    if codes is None:
+        codes = {}
+    
+    if root is not None:
+        if root.char is not None:
+            if len(code) == 0:  
+                codes[root.char] = '0' if code == '' else '1'  
+            else:
+                codes[root.char] = code
+        generate_codes(root.left, code + '0', codes)
+        generate_codes(root.right, code + '1', codes)
+    
+    return codes
+def huffman_encoded_length(text):
+    root = build_huffman_tree(text)
+    codes = generate_codes(root)
+    encoded_length = sum(len(codes[char]) for char in text)
+    return encoded_length
+
+# Ввод сообщения
+message = input().strip()
+# Вычисление длины зашифрованного сообщения
+encoded_length = huffman_encoded_length(message)
+print(encoded_length)
