@@ -1,0 +1,44 @@
+def find_lca(graph, root, a, b):
+    def find_path(node, target, path):
+        if node == target:
+            return True
+        if node not in graph:
+            return False
+        path.append(node)
+        for child in graph[node]:
+            if find_path(child, target, path):
+                return True
+        path.pop()
+        return False
+    
+    path_a = []
+    path_b = []
+    
+    if not find_path(root, a, path_a) or not find_path(root, b, path_b):
+        return None  # Одна из вершин не существует в дереве
+    
+    lca = None
+    for node_a, node_b in zip(path_a, path_b):
+        if node_a != node_b:
+            break
+        lca = node_a
+    
+    return lca
+
+# Считывание входных данных
+n = int(input())
+tree = eval(input())
+a, b = map(int, input().split())
+
+# Находим корень дерева
+root = None
+for node in tree:
+    if node not in tree.values():
+        root = node
+        break
+
+# Находим ближайшего общего предка
+lca = find_lca(tree, root, a, b)
+
+# Вывод результата
+print(lca)
