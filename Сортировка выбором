@@ -1,0 +1,21 @@
+def selection_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        min_index = i
+        for j in range(i + 1, n):
+            if arr[j] < arr[min_index]:
+                min_index = j
+        arr[i], arr[min_index] = arr[min_index], arr[i]
+        # Выводим состояние массива после половины итераций
+        if i == n // 2 - 1:
+            print(*arr, sep=' ')
+    return arr
+
+# Чтение входных данных
+arr = list(map(int, input().split()))
+
+# Сортировка массива выбором
+sorted_arr = selection_sort(arr.copy())
+
+# Вывод отсортированного массива
+print(*sorted_arr)
