@@ -1,0 +1,26 @@
+def maximize_profit(n, W, cakes):
+    cakes.sort(key=lambda x: x[0]/x[1], reverse=True)  # сортируем торты по цене за единицу объема (цена/объем)
+    total_value = 0
+    total_volume = 0
+
+    for cake in cakes:
+        if total_volume + cake[1] <= W:
+            total_value += cake[0]
+            total_volume += cake[1]
+        else:
+            remaining_volume = W - total_volume
+            total_value += (remaining_volume / cake[1]) * cake[0]
+            break
+
+    return total_value
+
+# Чтение входных данных
+n, W = map(int, input().split())
+cakes = []
+for _ in range(n):
+    p, s = map(int, input().split())
+    cakes.append((p, s))
+
+# Вычисление и вывод результата
+result = maximize_profit(n, W, cakes)
+print("{:.2f}".format(result))
